@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<!--Rough Outline for the New User Page
+Created By Abel Lawal
+04/13/15-->
+<!--Need to implement the CSS style sheet (Done 04/20/15)--> 
+<!--Catpcha Code Sourced From http://www.w3schools.in/php/captcha/-->
+<html>
+ <head>
+    <meta charset="utf-8">
+    <title> New User Page</title>
+    <link rel="StyleSheet" href="formStyleSheet.css" type="text/css">
+     <script src="newUserFormScript.js"></script> 
+         
+</head>
+
+<body>
+    <!--Need to supress ability to submit form unless form check is ok-->
+<form action = "http://localhost/424Project/userFormHandler.php" method= "post">
+    <p>New User Registration</p>
+    <!--First Name-->
+    <div id=" firstName">
+        <label for="fName">First Name:</label><br>
+        <input type ="text" id="fName" name="userFirstName" required/>
+    </div>
+    <!--Last Name-->
+    <div>
+        <label for="lName">Last Name:</label><br>
+        <input type ="text" id="lName" name="userLastName"/>
+    </div>
+    <!-- This is the section for the date of birth test throughly(Implement With Jquery Maybe)-->
+    <div>
+        <label for="dobDate">Date Of Birth: </label><br>
+        <input type="text" id="datepicker"  placeholder="MM/DD/YYYY" name="userDOB" onchange ="dobvalidate(this)" pattern ="^\d{2}/\d{2}/\d{4}$" required />
+        <!-- Script For Error Checking Need to move it all to one place for good form-->
+    </div>
+    <!--User Name-->
+    <div>   
+        <label for="uName">User Name:</label><br>
+        <input type ="text" id="uname" name="userName"  oninput="userValidate(this.value)"/>
+        <!--Need to add code to check database to see username isnt taken-->
+        <!-- Need to implement Ajax to do this, double check if it is this or this.value-->
+        <p id="inputTest"></p>
+        <p id="test"></p>
+    </div>
+    <!--Email-->
+    <div>
+        <label for="mail">Email Address:</label><br>
+        <input type ="email" id="mail" name ="userEmailAddress"/>
+    </div>
+    <!--Password-->
+    <div>
+        <label for="pword">Password:</label><br>
+        <input type ="password" id="pword" name=" userPassword" onchange="passwordStrength(this)"/><p id="pwordStrength"></p>
+    </div>
+    <!--Confirm Password-->
+    <div>
+        <label for="cpword">Confirm Password:</label><br>
+        <input type ="password" id="cpword" name="confirmPword" onchange=" confirmPassword(this)"/>
+        <p id="test"></p><br>
+    </div>
+    <!--This is going to be the Secret Question 1(Need To make sure that the answer and the selection are posted)-->
+    <!--This posts the value of the selection need some way to in database-->
+    <div>
+        <label for="sQ1">Secret Question 1:</label><br>
+        <select name ="secQues1">
+            <option value="sq1value1">Where were you when you had your first kiss?</option>
+            <option value="sq2value2">What was the last name of your third grade teacher?</option>
+            <option value="sq3value3">Where were you when you had your first alcoholic drink (or cigarette)?</option>
+        </select>
+
+        <input type ="text" id="sq1Answer" name="secQues1Answer" />
+    </div>
+    <!--Secret Question 2-->
+    <div>
+        <label for="sQ2">Secret Question 2:</label><br>
+        <select name ="secQues2">
+            <option value="sq2value1">Who was your childhood hero? </option>
+            <option value="sq2value2">What is the name of the hospital you were born?</option>
+            <option value="sq2value3">What is the name of the first movie you saw in the theater?</option>
+        </select>
+
+        <input type ="text" id="sq2Answer" name="secQues2Answer" />
+    </div>
+    <!--Captcha Section-->
+    <div id=" captcha">
+        <form action="" method="post" name="form1" id="form1" >
+            <table width="400" border="0" align="center" cellpadding="5" cellspacing="1" class="table">
+                <?php if(isset($msg)){?>
+                <tr>
+                    <td colspan="2" align="center" valign="top"><?php echo $msg;?></td>
+                </tr>
+                <?php } ?>
+                <tr>
+                    <td align="right" valign="top"> Validation code:</td>
+                    <td><img src="captcha.php?rand=<?php echo rand();?>" id='captchaimg'><br>
+                    <label for='message'>Enter the code above here :</label>
+                    <br>
+                    <input id="captcha_code" name="captcha_code" type="text">
+                    <br>
+                    Can't read the image? click <a href='javascript: refreshCaptcha();'>here</a> to refresh.</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td><input name="Submit" type="submit" onclick="return validate();" value="Submit" class="button1"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <!--Button-->
+    <div class="button">
+        <button type="submit">Create User!</button>
+    </div>
+</form>
+</body>
+</html>
