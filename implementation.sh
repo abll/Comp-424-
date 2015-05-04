@@ -1,6 +1,6 @@
 #!/bin/bash
-#
 
+<<implemntationscript
 #######LAMP Config####
 #configure the Apache server to not give an error on start
 echo "ServerName localhost" | sudo tee /etc/apache2/conf-available/fqdn.conf && sudo a2enconf fqdn
@@ -264,3 +264,5 @@ sudo echo "nospoof on" >> /etc/host.conf
 echo "expose_php = Off" | sudo tee -a /etc/php5/apache2/php.ini
 sudo service apache2 restart
 echo "Done with configurations."
+
+implemntationscript
