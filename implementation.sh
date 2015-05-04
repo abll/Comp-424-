@@ -98,11 +98,17 @@ sudo iptables -A BRTBLK -m recent --update --seconds 45 --hitcount 5 --name SSH 
 #if the ip address has more than 4 login attempts in the past 45 secound it is dropped
 sudo iptables -A BRTBLK -m recent --update --seconds 45 --hitcount 5 --name SSH -j DROP
 
-#allow traffic web server
+#allow traffic from web server
 sudo iptables -A INPUT -p tcp --sport 80 -j ACCEPT
 
-#allow https traffic
+#allow https traffic in
 sudo iptables -A INPUT -p tcp --sport 443 -j ACCEPT
+
+#allow http request web server
+sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+
+#allow https request
+sudo iptables -A INPUT -p tcp --dport 443 -j ACCEPT
 
 #allow mysql traffic in ""source:http://www.cyberciti.biz/tips/linux-iptables-18-allow-mysql-server-incoming-request.html
 sudo iptables -A INPUT -p tcp --dport 3306 -m state --state NEW,ESTABLISHED -j ACCEPT
