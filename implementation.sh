@@ -253,8 +253,11 @@ echo "Restarting Snort..."
 sudo service snort restart
 
 #apache conf edits
-echo "ServerSignature Off" | sudo tee -a /etc/apache2/apache2.conf
-echo "ServerTokens Prod" | sudo tee -a /etc/apache2/apache2.conf
+sudo sed -i 's/ServerSignature On/ServerSignature Off/' /etc/apache2/conf-available/security.conf
+sudo sed -i 's/ServerTokens OS/ServerTokens Prod/' /etc/apache2/conf-available/security.conf
+echo "Header unset ETag" | sudo tee -a /etc/apache2/conf-available/security.conf
+echo "FileETag None" | sudo tee -a /etc/apache2/conf-available/security.conf
+ln -s /etc/apache2/mods-available/headers.load /etc/apache2/mods-enabled/headers.load
 #ssl config edit
 sudo sed -i 's/SSLProtocol all \-SSLv2/SSLProtocol all \-SSLv2 \-SSLv3/' /etc/apache2/mods-available/ssl.conf
 #host conf edit
@@ -262,6 +265,8 @@ sudo sed -i 's/order hosts\,bind/order bind\,hosts/' /etc/host.conf
 sudo echo "nospoof on" >> /etc/host.conf
 #php conf edits
 echo "expose_php = Off" | sudo tee -a /etc/php5/apache2/php.ini
+sudo sed -i 's/pcntl_setpriority\, /&exec\, system\, shell_exec\, passthru\,/' /etc/php5/apache2/php.ini
+sudo sed -i 's/html_errors \= On/html_errors \= Off/'
 sudo service apache2 restart
 echo "Done with configurations."
 
