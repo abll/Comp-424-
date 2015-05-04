@@ -18,6 +18,11 @@ sudo apt-get -y install lamp-server^
 #make sure that firewall rules are applied when the server boots
 sudo apt-get install iptables-persistent
 
+#pulling scripts from github repo
+sudo apt-get install git
+git clone https://github.com/abll/Comp-424-.git
+
+
 #changing hostname of server
 sudo hostname comp424server
 sudo sed -i 's/ubuntu/comp424server/' /etc/hosts
