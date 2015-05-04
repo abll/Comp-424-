@@ -18,6 +18,58 @@ sudo apt-get -y install lamp-server^
 #make sure that firewall rules are applied when the server boots
 sudo apt-get install iptables-persistent
 
+#changing hostname of server
+sudo hostname comp424server
+sudo sed -i 's/ubuntu/comp424server/' /etc/hosts
+sudo sed -i 's/ubuntu/comp424server/' /etc/hostname
+
+#SSL portion
+sudo cp -p /etc/apache2/sites-available/default-ssl.conf /etc/apache2/sites-available/default-ssl.conf.old
+sudo apt-get install openssl
+sudo mkdir /etc/apache2/ssl
+sudo openssl genrsa -out "/etc/apache2/ssl/424.key" 2048
+sudo openssl req -new -key "/etc/apache2/ssl/424.key" \
+                 -out "/etc/apache2/ssl/424.csr"
+sudo openssl x509 -req -days 365 -in "/etc/apache2/ssl/424.csr" \
+                  -signkey "/etc/apache2/ssl/424.key"  \
+                  -out "/etc/apache2/ssl/424.crt"
+sudo a2enmod ssl
+sudo a2enmod rewrite
+sudo service apache2 restart
+
+echo "<VirtualHost *:80>
+ServerAdmin webmaster@yourdomain.com
+DocumentRoot /var/www/html
+ServerName mcop424server
+DirectoryIndex index.php
+ErrorLog /var/log/apache2/error.log
+<Location />
+RewriteEngine on
+RewriteCond %{HTTPS} off
+RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R]
+</Location>
+</VirtualHost>
+
+<VirtualHost *:443>
+ServerAdmin webmaster@yourdomain.com
+DocumentRoot /var/www/html
+ServerName comp424server
+DirectoryIndex index.php
+ErrorLog /var/log/apache2/error.log
+CustomLog /var/log/apache2/access.log combined
+SSLEngine On
+SSLCertificateFile /etc/apache2/ssl/424.crt
+SSLCertificateKeyFile /etc/apache2/ssl/424.key
+<Location />
+SSLRequireSSL On
+SSLVerifyClient optional
+SSLVerifyDepth 1
+SSLOptions +StdEnvVars +StrictRequire
+</Location>
+</VirtualHost>" | sudo tee -a /etc/apache2/apache2.conf
+
+sudo service apache2 reload
+
 #this part is used to install snort, openSSH, pulledpork and splunk along with it's dependencies 
 
 echo "[+] Installing OpenSSH..."
