@@ -61,18 +61,21 @@ if (($emailResult->num_rows == 0) && ($uNameResult->num_rows == 0))
 
     $insertQuery  = "INSERT INTO `userdatabase`.`users` (`user_name`, `first_name`, `last_name`, `Date_of_Birth`, `user_email`, `password`, `sq_1_ID`, `sq_1_Answer`, `sq_2_ID`, `sq_2_answer`, `temp_Password`) 
     VALUES ('$uName', '$firstName', '$lastName', '$userBirthDate', '$emailAddress', '$pWord', '$secretQuestion1', '$secretQuestion1Answer', '$secretQuestion2', '$secretQuestion2Answer', '$tempPassword')";
+
+    $result = $conn->query($insertQuery);
     
     if ($conn->query($insertQuery) === TRUE) {
         echo "New record created successfully";
-        }
-    else if ($conn->errno == 1062) //Duplicate Entry Code
+    }
+    else if(!($result))
     {
-        echo "ERROR Email Account Has Been Taken Try Forgot PassWord Link! <br>";
+        echo "Error". "<br>"
     } 
     else {
     echo "Error: " . $insertQuery . "<br>" . $conn->error;
     }
 
+    //Implement this with PHP Mailer
     $message = " To activate your account, please click on this link:\n\n";
 	$message .= WEBSITE_URL . '/activate.php?email=' . urlencode($emailAddress) . "&key=$tempPassword";
 	mail($emailAddress, 'Registration Confirmation', $message, $headers);

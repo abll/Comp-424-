@@ -1,6 +1,4 @@
 // This is the java script to validate the new User Form Html File.
-//Created By Abel Lawal
-//on 04/21/15
 
 //Code to Validate DOB
 function dobvalidate(input) 
@@ -102,14 +100,18 @@ function passwordStrength(input)
     if ((weakBool) && !(medBool) && !(StrBool)) 
     {
          document.getElementById('pwordStrength').innerHTML = "Weak";
+         input.setCustomValidity('At least 1 Upper Case Letter, 1 Special Character, 1 Number, 2 Lower Case Letters and Be At least 6 characters long');
     }
     else if ((weakBool) && (medBool) && !(StrBool))
     {
          document.getElementById('pwordStrength').innerHTML = "Medium";
-    }  
-    else if ((weakBool) && (medBool) && (StrBool)) 
+         input.setCustomValidity('');
+    }
+    else  
+    //else if ((weakBool) && (medBool) && (StrBool)) 
     {
          document.getElementById('pwordStrength').innerHTML = "Strong";
+         input.setCustomValidity('');
     }  
 
     //document.getElementById('pwordStrength').innerHTML = strength;
