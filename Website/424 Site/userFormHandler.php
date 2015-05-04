@@ -34,6 +34,10 @@ define('EMAIL', 'email@gmail.com');
 define('WEBSITE_URL', 'http://localhost');
 define("SQL_DUPLICATE_ERROR", 1062);
 
+$headers = "login@email.com"
+$headers  .= 'MIME-Version: 1.0' . "\r\n";
+$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+
 $conn = new mysqli($servername, $dbUserName, $dbPWord, $dbName);
 
 if($conn->connect_error)
@@ -61,7 +65,7 @@ if (($emailResult->num_rows == 0) && ($uNameResult->num_rows == 0))
     if ($conn->query($insertQuery) === TRUE) {
         echo "New record created successfully";
         }
-    else if ($conn->errno() == SQL_DUPLICATE_ERROR)
+    else if ($conn->errno == 1062) //Duplicate Entry Code
     {
         echo "ERROR Email Account Has Been Taken Try Forgot PassWord Link! <br>";
     } 
@@ -71,7 +75,7 @@ if (($emailResult->num_rows == 0) && ($uNameResult->num_rows == 0))
 
     $message = " To activate your account, please click on this link:\n\n";
 	$message .= WEBSITE_URL . '/activate.php?email=' . urlencode($emailAddress) . "&key=$tempPassword";
-	mail($emailAddress, 'Registration Confirmation', $message, 'From:'.EMAIL);
+	mail($emailAddress, 'Registration Confirmation', $message, $headers);
 }
 else
 {
