@@ -21,7 +21,12 @@ sudo apt-get install iptables-persistent
 #pulling scripts from github repo
 sudo apt-get install git
 git clone https://github.com/abll/Comp-424-.git
+#get Website branch on git or copy and paste the ZIP to desktop
+cd ~/Desktop/Comp-424--Website/Website
+sudo mv "424 Site" /var/www/html
 
+#buiding SQL database
+mysql -u root -p < "Comp-424-/Website/424 Database/userdatabaseUpdated.sql"
 
 #changing hostname of server
 sudo hostname comp424server
@@ -44,9 +49,9 @@ sudo service apache2 restart
 
 echo "<VirtualHost *:80>
 ServerAdmin webmaster@yourdomain.com
-DocumentRoot /var/www/html
-ServerName mcop424server
-DirectoryIndex index.php
+DocumentRoot "/var/www/html/424 Site"
+ServerName comp424server
+DirectoryIndex "login page.html"
 ErrorLog /var/log/apache2/error.log
 <Location />
 RewriteEngine on
@@ -57,9 +62,9 @@ RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R]
 
 <VirtualHost *:443>
 ServerAdmin webmaster@yourdomain.com
-DocumentRoot /var/www/html
+DocumentRoot "/var/www/html/424 Site"
 ServerName comp424server
-DirectoryIndex index.php
+DirectoryIndex "login page.html"
 ErrorLog /var/log/apache2/error.log
 CustomLog /var/log/apache2/access.log combined
 SSLEngine On
@@ -74,6 +79,7 @@ SSLOptions +StdEnvVars +StrictRequire
 </VirtualHost>" | sudo tee -a /etc/apache2/apache2.conf
 
 sudo service apache2 reload
+sudo service apache2 restart
 
 #this part is used to install snort, openSSH, pulledpork and splunk along with it's dependencies 
 
