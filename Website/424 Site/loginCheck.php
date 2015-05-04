@@ -15,20 +15,23 @@ if($conn->connect_error)
     die("Connection Failed: ".$conn->connect_error);
 }
 
-echo "\nConnected Successfully";
-
 // I need a query that will search the data base and return true if the user name and password match ill take another look at it in a sec
 
-$selectQuery = "SELECT * FROM users WHERE (user_email LIKE $uEmail AND password LIKE $password)";
-$altQuery = "SELECT CASE WHEN EXISTS (
-    SELECT *
-    FROM [users}
-    (WHERE user_email = $uEmail AND password = $password))";
+$selectQuery = "SELECT * FROM users WHERE user_email LIKE '$uEmail' AND password LIKE '$pWord'";
 
-if ($conn->query($altQuery) == 1) {
-    echo "\nLogin Successful";
-} else {
-    echo "\nLogin Failure";
+$result = $conn->query($selectQuery);
+
+if ($result->num_rows == 1) 
+{
+    echo "Login Successful <br>";
+    while($row = $result->fetch_assoc()) 
+    {
+        echo "First Name: " . $row["first_name"]. "<br>". "Last Name: " . $row["last_name"]. "<br>". "Last Login: ".
+        "<br>". "Number Of Logins: ". "<br>";
+    }
+} 
+else {
+    echo "Login Failure Please Check Email and Password";
 }
 
 $conn->close();
