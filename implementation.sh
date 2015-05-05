@@ -1,6 +1,5 @@
 #!/bin/bash
 
-<<implemntationscript
 #######LAMP Config####
 #configure the Apache server to not give an error on start
 echo "ServerName localhost" | sudo tee /etc/apache2/conf-available/fqdn.conf && sudo a2enconf fqdn
@@ -18,7 +17,7 @@ sudo service apache2 restart
 sudo iptables -F
 
 #prevent port scan by forcing syn packets on new connections ""source: http://ketan.lithiumfox.com/doku.php/iptables
-#sudo iptables -A INPUT -p tcp ! --syn -m state --state NEW -j DROP
+sudo iptables -A INPUT -p tcp ! --syn -m state --state NEW -j DROP
 
 #prevent DOS attack ""source: http://www.thegeekstuff.com/2011/06/iptables-rules-examples/
 sudo iptables -A INPUT -p tcp --dport 80 -m limit --limit 25/minute --limit-burst 100 -j ACCEPT
@@ -261,8 +260,6 @@ sudo service snort restart
 #apache conf edits
 sudo sed -i 's/ServerSignature On/ServerSignature Off/' /etc/apache2/conf-available/security.conf
 sudo sed -i 's/ServerTokens OS/ServerTokens Prod/' /etc/apache2/conf-available/security.conf
-echo "Header unset ETag" | sudo tee -a /etc/apache2/conf-available/security.conf
-echo "FileETag None" | sudo tee -a /etc/apache2/conf-available/security.conf
 ln -s /etc/apache2/mods-available/headers.load /etc/apache2/mods-enabled/headers.load
 #ssl config edit
 sudo sed -i 's/SSLProtocol all \-SSLv2/SSLProtocol all \-SSLv2 \-SSLv3/' /etc/apache2/mods-available/ssl.conf
@@ -277,6 +274,6 @@ sudo service apache2 restart
 echo "Done with configurations."
 <<<<<<< HEAD
 
-implemntationscript
+
 =======
 >>>>>>> origin/master

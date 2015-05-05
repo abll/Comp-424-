@@ -1,6 +1,5 @@
 #!/bin/bash
 
-<<installscript
 #this part is used to install the tools used for the LAMP stack and its security 
 #update
 sudo apt-get update
@@ -22,7 +21,10 @@ sudo apt-get install iptables-persistent
 sudo apt-get install git
 git clone https://github.com/abll/Comp-424-.git
 #get Website branch on git or copy and paste the ZIP to desktop
-cd ~/Desktop/Comp-424--Website/Website
+cd ~/Desktop/Comp-424-
+git fetch
+git checkout Website
+cd Website
 sudo mv "424 Site" /var/www/html
 
 #buiding SQL database
@@ -180,7 +182,3 @@ sleep 2
 #securing shared memory 
 echo "tmpfs     /dev/shm     tmpfs     defaults,noexec,nosuid     0     0" >> /etc/fstab
 sudo reboot
-
-installscript
-
-
